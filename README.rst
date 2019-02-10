@@ -26,7 +26,7 @@ Usage
 .. code:: zsh
 
    % curl -d '{"message": "Hoi Zäme!"}' http://localhost:8080
-   {"message": "Hoi Z̈́äme!"}
+   {"message": "Hoi Zäme!"}
 
 
 License
