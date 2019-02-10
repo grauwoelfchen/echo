@@ -20,6 +20,16 @@ Just build and run this tcp server.
    % ./target/debug/echo
 
 
+If you want to run it in a container. You would need to set HOST as ``0.0.0.0`` (default: `127.0.0.1`).
+
+.. code:: zsh
+
+   # build-arg(s) are optional
+   % docker build --build-arg HOST=0.0.0.0 --build-arg PORT=5000 \
+       -t grauwoelfchen/echo:latest .
+   % docker container run -d -p 8080:5000 grauwoelfchen/echo:latest
+
+
 Usage
 =====
 
