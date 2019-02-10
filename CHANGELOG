@@ -1,2 +1,5 @@
+Sun 10 Feb 2019 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
+	* Remove sent header from response (returns only received body)
+
 Sat 09 Feb 2019 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
 	* Initial commit ;)

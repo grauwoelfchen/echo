@@ -1,24 +1,42 @@
 use std::env;
-use std::io;
+use std::io::{self, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 
-fn handle(mut stream: TcpStream) -> io::Result<u64> {
-    // NOT: This might need set_{read,write}_timeout or async things... :'(
+fn handle(mut stream: TcpStream) {
+    // NOTE:
+    // This might need set_{read,write}_timeout or async things... :'(
     stream
         .set_nonblocking(true)
         .expect("cannot set non-blocking mode");
     stream.set_nodelay(true).expect("cannot set nodelay mode");
 
-    let bytes = match io::copy(&mut stream.try_clone().unwrap(), &mut stream) {
-        Ok(b) => b,
+    // NOTE:
+    // Previously, we implemented this using just `io::copy()`. However it
+    // returns also sent header. In here, only body should be returned.
+    //
+    // And apparently, it seems that `read_to_end()` or BufReader's `lines()`
+    // returns by EOF between header and body. Is there any good way? :'(
+
+    let mut buf = String::new();
+    let _size = match stream.read_to_string(&mut buf) {
+        Ok(s) => s,
         Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => 0,
         Err(e) => {
-            println!("wrn: {}", e);
-            0
+            panic!("err: {}", e);
         },
     };
-    Ok(bytes)
+
+    let mut body = false;
+    for line in buf.lines() {
+        if line == "" {
+            body = true;
+        } else if body {
+            stream
+                .write_all(format!("{}\r\n", line).as_bytes())
+                .unwrap();
+        }
+    }
 }
 
 fn get_addr() -> String {

@@ -25,7 +25,7 @@ Usage
 
 .. code:: zsh
 
-   % curl -X POST -d '{"message": "Hoi Zäme!"}' http://localhost:8080
+   % curl -d '{"message": "Hoi Zäme!"}' http://localhost:8080
    {"message": "Hoi Z̈́äme!"}
 
 
