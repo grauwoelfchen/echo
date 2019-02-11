@@ -1,3 +1,5 @@
+# Gentoo Linux container with Rust (latest)
+# https://github.com/grauwoelfchen/portolan/blob/master/rust/latest/Dockerfile
 FROM grauwoelfchen/rust:latest as app
 
 RUN mkdir /echo
