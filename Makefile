@@ -42,7 +42,7 @@ test: | test\:all
 # coverage
 
 coverage:  ## Generate coverage report of unit tests only for lib using kcov [alias: cov]
-	@cargo test --lib echo --no-run
+	@cargo test --bin echo --no-run
 	@./.tools/setup-kcov
 	./.tools/get-covered echo
 .PHONY: coverage
@@ -56,7 +56,7 @@ build\:debug:  ## Run debug build [alias: build]
 	cargo build
 .PHONY: build\:debug
 
-build: | build\debug
+build: | build\:debug
 .PHONY: build
 
 build\:release:  ## Create release build
