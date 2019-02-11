@@ -1,7 +1,20 @@
 [package]
 name = "echo"
 version = "0.1.0"
-authors = ["Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>"]
 edition = "2018"
+authors = ["Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>"]
+description = "an echo server"
+repository = "https://gitlab.com/grauwoelfchen/overlap"
+keywords = []
+license = "Apache-2.0"
+
+[[bin]]
+name = "echo"
+path = "src/main.rs"
 
 [dependencies]
+
+[dev-dependencies.cargo-husky]
+version = "1"
+default-features = false
+features = ["user-hooks"]
