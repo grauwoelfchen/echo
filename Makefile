@@ -39,6 +39,17 @@ test\:all:  ## Run unit tests and integration tests [alias: test]
 test: | test\:all
 .PHONY: test
 
+# coverage
+
+coverage:  ## Generate coverage report of unit tests only for lib using kcov [alias: cov]
+	@cargo test --lib echo --no-run
+	@./.tools/setup-kcov
+	./.tools/get-covered echo
+.PHONY: coverage
+
+cov: | coverage
+.PHONY: cov
+
 # build
 
 build\:debug:  ## Run debug build [alias: build]
