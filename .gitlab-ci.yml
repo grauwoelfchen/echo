@@ -1,0 +1,83 @@
+stages:
+  - vet
+  - test
+  - build
+
+.ci-tools: &ci-tools
+  image: grauwoelfchen/rust-ci-tools:nightly
+  except:
+    - tags
+
+check:
+  stage: vet
+  <<: *ci-tools
+  before_script:
+    - rustc --version
+    - cargo --version
+    - mkdir -p .git/hooks
+  script:
+    - make vet:check
+
+format:
+  stage: vet
+  <<: *ci-tools
+  before_script:
+    - rustc --version
+    - cargo --version
+    - cargo fmt --version
+    - mkdir -p .git/hooks
+  script:
+    - make vet:format
+
+lint:
+  stage: vet
+  <<: *ci-tools
+  before_script:
+    - rustc --version
+    - cargo --version
+    - cargo clippy --version
+    - mkdir -p .git/hooks
+  script:
+    - make vet:lint
+
+test:
+  stage: test
+  <<: *ci-tools
+  before_script:
+    - rustc --version
+    - cargo --version
+    - kcov --version
+    - mkdir -p .git/hooks
+  script:
+    # test & get covered
+    - KCOV_PATH=/usr/bin/kcov make coverage
+  after_script:
+    - cat target/coverage/index.json
+
+build:
+  stage: build
+  image: grauwoelfchen/rust:latest
+  before_script:
+    - rustc --version
+    - cargo --version
+    - mkdir -p .git/hooks
+  script:
+    - make build:debug
+  cache:
+    untracked: true
+  only:
+    - master
+
+release:
+  stage: build
+  image: grauwoelfchen/rust:latest
+  before_script:
+    - rustc --version
+    - cargo --version
+    - mkdir -p .git/hooks
+  script:
+    - make build:release
+  cache:
+    untracked: true
+  only:
+    - tags
