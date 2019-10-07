@@ -1,45 +1,45 @@
-# vet
-
-vet\:check:  ## Check rust syntax
+# verify -- {{{
+verify\:check:  ## Check rust syntax [alias: check]
 	@cargo check --all -v
-.PHONY: vet\:check
+.PHONY: verify\:check
 
-vet\:format:  ## Check format without changes [alias: vet:fmt, format, fmt]
+check: | verify\:check
+.PHONY: check
+
+verify\:format:  ## Check format without changes [alias: verify:fmt, format, fmt]
 	@cargo fmt --all -- --check
-.PHONY: vet\:format
+.PHONY: verify\:format
 
-vet\:fmt: | vet\:format
-.PHONY: vet\:fmt
+verify\:fmt: | verify\:format
+.PHONY: verify\:fmt
 
-format: | vet\:format
+format: | verify\:format
 .PHONY: format
 
-fmt: | vet\:format
+fmt: | verify\:format
 .PHONY: fmt
 
-vet\:lint:  ## Check style using clippy [alias: lint]
+verify\:lint:  ## Check coding style using clippy [alias: lint]
 	@cargo clippy --all-targets
-.PHONY: vet\:lint
+.PHONY: verify\:lint
 
-lint: | vet\:lint
+lint: | verify\:lint
 .PHONY: lint
 
-vet\:all: | vet\:check vet\:format vet\:lint  ## Check code using all vet:xxx targets [alias: vet]
-.PHONY: vet\:all
+verify\:all: | verify\:check verify\:format verify\:lint  ## Check code using all verify:xxx targets [alias: verify]
+.PHONY: verify\:all
 
-vet: | vet\:all
-.PHONY: vet
+verify: | verify\:all
+.PHONY: verify
+# }}}
 
-# test
-
+# test -- {{{
 test\:all:  ## Run unit tests and integration tests [alias: test]
 	@cargo test --tests
 .PHONY: test
 
 test: | test\:all
 .PHONY: test
-
-# coverage
 
 coverage:  ## Generate coverage report of unit tests only for lib using kcov [alias: cov]
 	@cargo test --bin echo --no-run
@@ -49,9 +49,9 @@ coverage:  ## Generate coverage report of unit tests only for lib using kcov [al
 
 cov: | coverage
 .PHONY: cov
+# }}}
 
-# build
-
+# build -- {{{
 build\:debug:  ## Run debug build [alias: build]
 	cargo build
 .PHONY: build\:debug
@@ -62,20 +62,21 @@ build: | build\:debug
 build\:release:  ## Create release build
 	cargo build --release
 .PHONY: build\:release
+# }}}
 
-
-# other utilities
-
+# other utilities -- {{{
 clean:  ## Tidy up
 	cargo clean
 .PHONY: clean
 
 help:  ## Display this message
 	@grep -E '^[0-9a-z\:\\]+: ' $(MAKEFILE_LIST) | grep -E '  ## ' | \
-	  sed -e 's/\(\s|\(\s[0-9a-z\:\\]*\)*\)  /  /' | tr -d \\\\ | \
-	  awk 'BEGIN {FS = ":  ## "}; {printf "\033[38;05;222m%-13s\033[0m %s\n", $$1, $$2}' | \
-	  sort
+		sed -e 's/\(\s|\(\s[0-9a-z\:\\]*\)*\)  /  /' | tr -d \\\\ | \
+		awk 'BEGIN {FS = ":  ## "};" \
+			"{printf "\033[38;05;222m%-13s\033[0m %s\n", $$1, $$2}' | \
+		sort
 .PHONY: help
+# }}}
 
 .DEFAULT_GOAL = test\:all
 default: test\:all
