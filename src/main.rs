@@ -27,14 +27,14 @@ fn handle(mut stream: TcpStream) {
         },
     };
 
-    let mut body = false;
+    let mut has_body = false;
     for line in buf.lines() {
         if line == "" {
-            body = true;
-        } else if body {
-            stream
-                .write_all(format!("{}\r\n", line).as_bytes())
-                .unwrap();
+            has_body = true;
+        } else if has_body {
+            let response = format!("HTTP/1.1 200 OK\r\n\r\n{}\r\n", line);
+            stream.write_all(response.as_bytes()).unwrap();
+            stream.flush().unwrap();
         }
     }
 }
