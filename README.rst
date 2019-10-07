@@ -26,14 +26,15 @@ Just build and run this tcp server.
    % ./target/debug/echo
 
 
-If you want to run it in a container (e.g. Gentoo Linux). You would need to set HOST as ``0.0.0.0`` (default: `127.0.0.1`).
+If you want to run it in a container (e.g. Gentoo Linux).  
+You may need to set HOST and PORT as you need (default: `0.0.0.0:8000`).
 
 .. code:: zsh
 
    # build-arg(s) are optional
    % docker build --build-arg HOST=0.0.0.0 --build-arg PORT=5000 \
        -t grauwoelfchen/echo:latest .
-   % docker container run -d -p 8080:5000 grauwoelfchen/echo:latest
+   % docker container run -d -p 8000:5000 grauwoelfchen/echo:latest
 
 See Dockerfile
 
