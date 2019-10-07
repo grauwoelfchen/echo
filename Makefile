@@ -65,6 +65,10 @@ build\:release:  ## Create release build
 # }}}
 
 # other utilities -- {{{
+serve:
+	@HOST=127.0.0.1 PORT=8000 cargo run --quiet --bin echo
+.PHONY: serve
+
 clean:  ## Tidy up
 	cargo clean
 .PHONY: clean

@@ -22,8 +22,10 @@ Just build and run this tcp server.
 .. code:: zsh
 
    % make build
-
    % ./target/debug/echo
+
+   # or run a server built as development build via cargo run (127.0.0.1:8000)
+   % make serve
 
 
 If you want to run it in a container (e.g. Gentoo Linux).  
