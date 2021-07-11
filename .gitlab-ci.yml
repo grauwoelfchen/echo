@@ -49,10 +49,9 @@ test:
     - kcov --version
     - mkdir -p .git/hooks
   script:
-    # test & get covered
-    - KCOV_PATH=/usr/bin/kcov make coverage
+    - make coverage
   after_script:
-    - cat target/coverage/index.json
+    - cat target/coverage/index.js
 
 build:
   stage: build

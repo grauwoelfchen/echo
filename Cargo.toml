@@ -2,7 +2,7 @@
 name = "echo"
 version = "0.1.0"
 edition = "2018"
-authors = ["Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>"]
+authors = ["Yasuhiro Яша Asaka <yasuhiro.asaka@grauwoelfchen.net>"]
 description = "an echo server"
 repository = "https://gitlab.com/grauwoelfchen/overlap"
 keywords = []
