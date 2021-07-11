@@ -1,10 +1,15 @@
-Mon 11 Feb 2019 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
+Mon 12 Jul 2021 Yasuhiro Яша Asaka <yasuhiro.asaka@grauwoelfchen.net>
+	* Fix docker image names on CI
+	* Fix styles
+	* Remove utility scripts
+
+Mon 11 Feb 2019 Yasuhiro Яша Asaka <yasuhiro.asaka@grauwoelfchen.net>
 	* Enable CI
 	* Enter .cargo-huskey
 
-Sun 10 Feb 2019 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
+Sun 10 Feb 2019 Yasuhiro Яша Asaka <yasuhiro.asaka@grauwoelfchen.net>
 	* Create Dockerfile
 	* Remove sent header from response (returns only received body)
 
-Sat 09 Feb 2019 Yasuhiro Asaka <yasuhiro.asaka@grauwoelfchen.net>
+Sat 09 Feb 2019 Yasuhiro Яша Asaka <yasuhiro.asaka@grauwoelfchen.net>
 	* Initial commit ;)
