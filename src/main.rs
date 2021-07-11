@@ -24,12 +24,12 @@ fn handle(mut stream: TcpStream) {
         Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => 0,
         Err(e) => {
             panic!("err: {}", e);
-        },
+        }
     };
 
     let mut has_body = false;
     for line in buf.lines() {
-        if line == "" {
+        if line.is_empty() {
             has_body = true;
         } else if has_body {
             let response = format!("HTTP/1.1 200 OK\r\n\r\n{}\r\n", line);
@@ -52,7 +52,7 @@ fn main() -> io::Result<()> {
         match stream {
             Ok(s) => {
                 thread::spawn(move || handle(s));
-            },
+            }
             Err(e) => panic!("err: {}", e),
         }
     }
