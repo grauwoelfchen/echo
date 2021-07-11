@@ -1,11 +1,11 @@
 Echo
 ====
 
-.. image:: https://gitlab.com/grauwoelfchen/echo/badges/master/pipeline.svg
-   :target: https://gitlab.com/grauwoelfchen/echo/commits/master
+.. image:: https://gitlab.com/grauwoelfchen/echo/badges/trunk/pipeline.svg
+   :target: https://gitlab.com/grauwoelfchen/echo/commits/trunk
 
-.. image:: https://gitlab.com/grauwoelfchen/echo/badges/master/coverage.svg
-   :target: https://gitlab.com/grauwoelfchen/echo/commits/master
+.. image:: https://gitlab.com/grauwoelfchen/echo/badges/trunk/coverage.svg
+   :target: https://gitlab.com/grauwoelfchen/echo/commits/trunk
 
 
 Repository
