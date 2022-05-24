@@ -6,27 +6,47 @@ extern crate lazy_static;
 extern crate parking_lot;
 
 use std::env;
-use std::io::{self, Read, Write};
+use std::io::{self, BufReader, Write};
+use std::io::prelude::*;
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 
-fn handle(mut stream: TcpStream) {
-    // NOTE:
-    // This might need set_{read,write}_timeout or async things... :'(
+fn get_local_addr() -> String {
+    let host = env::var("HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
+    let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
+    format!("{}:{}", host, port)
+}
+
+fn handle(stream: TcpStream) {
+    stream.set_nodelay(true).expect("cannot set nodelay mode");
+
+    // nonblocking
     stream
         .set_nonblocking(true)
         .expect("cannot set non-blocking mode");
-    stream.set_nodelay(true).expect("cannot set nodelay mode");
+    // with blocking
+    // stream.set_read_timeout(Some(Duration::from_millis(1000))).unwrap();
+    // stream.set_write_timeout(Some(Duration::from_millis(1000))).unwrap();
 
-    // NOTE:
-    // Previously, we implemented this using just `io::copy()`. However it
-    // returns also sent header. In here, only body should be returned.
+    let (reader, writer) = &mut (&stream, &stream);
+
+    let mut buf = BufReader::new(reader);
+
+    // e.g. POST / HTTP/1.1\r\n
+    let mut request_line = String::new();
+    let _num_bytes = buf.read_line(&mut request_line);
+    println!("{}", request_line);
+
+    // https://doc.rust-lang.org/std/io/enum.ErrorKind.html#variant.WouldBlock
     //
-    // And apparently, it seems that `read_to_end()` or BufReader's `lines()`
-    // returns by EOF between header and body. Is there any good way? :'(
-
-    let mut buf = String::new();
-    let _size = match stream.read_to_string(&mut buf) {
+    // WouldBlock:
+    //   The operation needs to block to complete, but the blocking operation
+    //   was requested to not occur.
+    //
+    // Note:
+    // Ignore the blocking error at here for now.
+    let mut input = String::new();
+    let _ = match buf.read_to_string(&mut input) {
         Ok(s) => s,
         Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => 0,
         Err(e) => {
@@ -34,22 +54,27 @@ fn handle(mut stream: TcpStream) {
         }
     };
 
-    let mut has_body = false;
-    for line in buf.lines() {
+    let mut headers = Vec::<&str>::new();
+    let mut body = String::new();
+
+    let mut is_body = false;
+    for line in input.lines() {
         if line.is_empty() {
-            has_body = true;
-        } else if has_body {
-            let response = format!("HTTP/1.1 200 OK\r\n\r\n{}\r\n", line);
-            stream.write_all(response.as_bytes()).unwrap();
-            stream.flush().unwrap();
+            is_body = true;
+            continue;
+        }
+        if !is_body {
+            headers.push(line);
+        } else {
+            body.push_str(line);
         }
     }
-}
+    println!("{}\n", headers.join("\n"));
+    println!("{}", body);
 
-fn get_local_addr() -> String {
-    let host = env::var("HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
-    let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
-    format!("{}:{}", host, port)
+    let response = format!("HTTP/1.1 200 OK\r\n\r\n{}\r\n", body);
+    writer.write_all(response.as_bytes()).unwrap();
+    writer.flush().unwrap();
 }
 
 fn main() -> io::Result<()> {
